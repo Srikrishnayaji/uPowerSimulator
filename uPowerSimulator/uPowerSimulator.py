@@ -1,5 +1,5 @@
 line = ""
-deci_pc = -1
+deci_pc = 0
 
 from math import pow
 
@@ -252,8 +252,8 @@ def read_text_segment():
         special_registers["pc"] = special_registers["pc"] + 4
         special_registers["pc"] = "0x{:016x}".format(special_registers["pc"])
         line = inslist[deci_pc][:32]
-        deci_pc += 1
         compute_instruction()
+        deci_pc += 1
     init_text.close()
 
 #wrapper function.
