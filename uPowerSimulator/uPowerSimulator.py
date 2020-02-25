@@ -1,5 +1,5 @@
 line = ""
-deci_pc = 0
+deci_pc = -1
 
 from math import pow
 
@@ -155,9 +155,9 @@ def bca():
     bi = get_decimal_value(line[11:16])
     val = (get_decimal_value(line[16:30])//4)
     global deci_pc
-    if bi == 29 and special_registers['cr'][60] == '1':
+    if bi == 28 and special_registers['cr'][60] == '1':
         deci_pc = val
-    elif bi == 28 and special_registers['cr'][61] == '1':
+    elif bi == 29 and special_registers['cr'][61] == '1':
         deci_pc = val
     elif bi == 30 and special_registers['cr'][62] == '1':
         deci_pc = val
@@ -252,8 +252,8 @@ def read_text_segment():
         special_registers["pc"] = special_registers["pc"] + 4
         special_registers["pc"] = "0x{:016x}".format(special_registers["pc"])
         line = inslist[deci_pc][:32]
+        deci_pc += 1
         compute_instruction()
-        deci_pc +=1
     init_text.close()
 
 #wrapper function.
