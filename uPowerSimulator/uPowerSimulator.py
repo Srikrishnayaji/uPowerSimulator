@@ -138,7 +138,7 @@ def SLDW():
 def Andi():
     register_table[get_decimal_value(line[6:11])] = register_table[get_decimal_value(line[11:16])] & get_two_complement_number(line[16:])
 
-def cmp():
+def Cmp():
     bf = get_decimal_value(line[6:9])
     l = int(line[10])
     if bf == 7 and l == 1:
@@ -164,7 +164,7 @@ def bca():
 
 #instruction dictionaries and detection function.
 XO = {266: add, 40: subf}
-X  = {476: Nand, 28: And, 444: Or, 539: SRDW, 27: SLDW, 0:cmp}
+X  = {476: Nand, 28: And, 444: Or, 539: SRDW, 27: SLDW, 0:Cmp}
 XS = {}
 get_instruction_from_pop = {14:addi, 58:load, 62:store, 24:Ori, 28:Andi, 32:lwz, 36:stw, 19:bca}
 
