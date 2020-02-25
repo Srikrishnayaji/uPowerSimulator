@@ -155,9 +155,9 @@ def bca():
     bi = get_decimal_value(line[11:16])
     val = (get_decimal_value(line[16:30])//4)
     global deci_pc
-    if bi == 28 and special_registers['cr'][60] == '1':
+    if bi == 29 and special_registers['cr'][60] == '1':
         deci_pc = val
-    elif bi == 29 and special_registers['cr'][61] == '1':
+    elif bi == 28 and special_registers['cr'][61] == '1':
         deci_pc = val
     elif bi == 30 and special_registers['cr'][62] == '1':
         deci_pc = val
