@@ -141,7 +141,7 @@ def Andi():
 def cmp():
     bf = get_decimal_value(line[6:9])
     l = int(line[10])
-    if bf == 7 && l == 1:
+    if bf == 7 and l == 1:
         a = register_table[get_decimal_value(line[11:16])]
         b = register_table[get_decimal_value(line[16:21])]
         if a < b:
@@ -155,11 +155,11 @@ def bca():
     bi = get_decimal_value(line[11:16])
     val = (get_decimal_value(line[16:30])//4)
     global deci_pc
-    if bi == 28 && special_registers['cr'][60] == '1':
+    if bi == 28 and special_registers['cr'][60] == '1':
         deci_pc = val
-    elif bi == 29 && special_registers['cr'][61] == '1':
+    elif bi == 29 and special_registers['cr'][61] == '1':
         deci_pc = val
-    elif bi == 30 && special_registers['cr'][62] == '1':
+    elif bi == 30 and special_registers['cr'][62] == '1':
         deci_pc = val
 
 #instruction dictionaries and detection function.
