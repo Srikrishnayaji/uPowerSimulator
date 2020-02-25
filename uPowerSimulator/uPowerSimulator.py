@@ -69,11 +69,31 @@ def load():
         else:
             register_table[get_decimal_value(line[6:11])] = 0
 
+def lwz():
+    base = 0x0000000010000000
+    ra = register_table[get_decimal_value(line[11:16])]
+    offset = get_two_complement_number(line[16:])
+    loc = base + ra + offset
+    if loc >= int('0x0000000010000000', 0):
+        loc = "0x{:016x}".format(loc)
+        if loc in data_table.keys():
+            register_table[get_decimal_value(line[6:11])] = data_table[loc]
+        else:
+            register_table[get_decimal_value(line[6:11])] = 0
+
 def store():
     base = 0x0000000010000000
     ra = register_table[get_decimal_value(line[11:16])]
     offset = get_two_complement_number(line[16:30])
     loc = base + ra + offset
+    loc = "0x{:016x}".format(loc)
+    data_table[loc] = register_table[get_decimal_value(line[6:11])]
+
+def stw():
+    base = 0x0000000010000000
+    ra = register_table[get_decimal_value(line[11:16])]
+    offset = get_two_complement_number(line[16:])
+    loc = base + offset + ra
     loc = "0x{:016x}".format(loc)
     data_table[loc] = register_table[get_decimal_value(line[6:11])]
 
@@ -109,7 +129,7 @@ def Andi():
 XO = {266: add, 40: subf}
 X  = {476: Nand, 28: And, 444: Or, 539: SRDW, 27: SLDW}
 XS = {}
-get_instruction_from_pop = {14:addi, 58:load, 62:store, 24:Ori, 28:Andi}
+get_instruction_from_pop = {14:addi, 58:load, 62:store, 24:Ori, 28:Andi, 32:lwz, 36:stw}
 
 #instruction detection function.
 def compute_instruction():
