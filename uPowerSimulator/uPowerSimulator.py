@@ -1,4 +1,5 @@
 line = ""
+deci_pc = 0
 
 from math import pow
 
@@ -11,7 +12,7 @@ for i in range(0,32):
     register_table.append(0)
 
 data_table = {} #data table definition
-special_registers = {"pc": '0x0000000000400000', 'sp': '0x0000003ffffffff0'}
+special_registers = {"pc": '0x0000000000400000', 'sp': '0x0000003ffffffff0', 'cr': "{:064b}".format(0)}
 
 #convertion functions and overflow check functions.
 def get_decimal_value(binary_value):
@@ -41,6 +42,7 @@ def check_overflow(value):
     return value
 
 def know_type(loc):
+    size_string = "{:032b}"
     if loc in type_table['01']:
         size_string = "{:032b}"
     elif loc in type_table['11']:
@@ -96,8 +98,8 @@ def store():
     offset = get_two_complement_number(line[16:30])
     loc = base + ra + offset
     loc = "0x{:016x}".format(loc)
-    size_string = know_type(loc)
-    data_table[loc] = size_string.format(register_table[get_decimal_value(line[6:11])])
+    size = know_type(loc)
+    data_table[loc] = size.format(register_table[get_decimal_value(line[6:11])])
 
 def stw():
     base = 0x0000000010000000
@@ -105,8 +107,8 @@ def stw():
     offset = get_two_complement_number(line[16:])
     loc = base + offset + ra
     loc = "0x{:016x}".format(loc)
-    size_string = know_type(loc)
-    data_table[loc] = size_string.register_table[get_decimal_value(line[6:11])]
+    size = know_type(loc)
+    data_table[loc] = size.format(register_table[get_decimal_value(line[6:11])])
 
 def And():
     register_table[get_decimal_value(line[6:11])] = (register_table[get_decimal_value(line[11:16])] & register_table[get_decimal_value(line[16:21])])
@@ -136,11 +138,35 @@ def SLDW():
 def Andi():
     register_table[get_decimal_value(line[6:11])] = register_table[get_decimal_value(line[11:16])] & get_two_complement_number(line[16:])
 
+def cmp():
+    bf = get_decimal_value(line[6:9])
+    l = int(line[10])
+    if bf == 7 and l == 1:
+        a = register_table[get_decimal_value(line[11:16])]
+        b = register_table[get_decimal_value(line[16:21])]
+        if a < b:
+            special_registers['cr'] = "{:064b}".format(8)
+        elif a > b:
+            special_registers['cr'] = "{:064b}".format(4)
+        else:
+            special_registers['cr'] = "{:064b}".format(2)
+
+def bca():
+    bi = get_decimal_value(line[11:16])
+    val = (get_decimal_value(line[16:30])//4)
+    global deci_pc
+    if bi == 28 and special_registers['cr'][60] == '1':
+        deci_pc = val
+    elif bi == 29 and special_registers['cr'][61] == '1':
+        deci_pc = val
+    elif bi == 30 and special_registers['cr'][62] == '1':
+        deci_pc = val
+
 #instruction dictionaries and detection function.
 XO = {266: add, 40: subf}
-X  = {476: Nand, 28: And, 444: Or, 539: SRDW, 27: SLDW}
+X  = {476: Nand, 28: And, 444: Or, 539: SRDW, 27: SLDW, 0:cmp}
 XS = {}
-get_instruction_from_pop = {14:addi, 58:load, 62:store, 24:Ori, 28:Andi, 32:lwz, 36:stw}
+get_instruction_from_pop = {14:addi, 58:load, 62:store, 24:Ori, 28:Andi, 32:lwz, 36:stw, 19:bca}
 
 #instruction detection function.
 def compute_instruction():
@@ -220,13 +246,14 @@ def read_text_segment():
             count = len(inslist)
     else:
         count = len(inslist)
-
-    for index in range(0, count):
+    global deci_pc
+    while(deci_pc < count):
         special_registers["pc"] = int(special_registers["pc"], 0)
         special_registers["pc"] = special_registers["pc"] + 4
         special_registers["pc"] = "0x{:016x}".format(special_registers["pc"])
-        line = inslist[index][:32]
+        line = inslist[deci_pc][:32]
         compute_instruction()
+        deci_pc +=1
     init_text.close()
 
 #wrapper function.
