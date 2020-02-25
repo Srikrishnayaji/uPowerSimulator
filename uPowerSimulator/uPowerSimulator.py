@@ -2,6 +2,8 @@ line = ""
 
 from math import pow
 
+#required tables and dictionaries.
+type_table = {'01':[], '10':[], '11':[]}
 #memory table definition
 register_table = []  #register table definition
 
@@ -37,6 +39,13 @@ def check_overflow(value):
     elif value < (-1 * int(pow(2, 63))):
         value = value + int(pow(2, 64))
     return value
+
+def know_type(loc):
+    if loc in type_table['01']:
+        size_string = "{:032b}"
+    elif loc in type_table['11']:
+        size_string = "{:08b}"
+    return(size_string)
 
 #instruction execution function.
 def add():
@@ -87,7 +96,8 @@ def store():
     offset = get_two_complement_number(line[16:30])
     loc = base + ra + offset
     loc = "0x{:016x}".format(loc)
-    data_table[loc] = register_table[get_decimal_value(line[6:11])]
+    size_string = know_type(loc)
+    data_table[loc] = size_string.format(register_table[get_decimal_value(line[6:11])])
 
 def stw():
     base = 0x0000000010000000
@@ -95,7 +105,8 @@ def stw():
     offset = get_two_complement_number(line[16:])
     loc = base + offset + ra
     loc = "0x{:016x}".format(loc)
-    data_table[loc] = register_table[get_decimal_value(line[6:11])]
+    size_string = know_type(loc)
+    data_table[loc] = size_string.register_table[get_decimal_value(line[6:11])]
 
 def And():
     register_table[get_decimal_value(line[6:11])] = (register_table[get_decimal_value(line[11:16])] & register_table[get_decimal_value(line[16:21])])
@@ -190,6 +201,7 @@ def read_data_segment():
             offset = 1
         next_addr = base + get_decimal_value(address)
         for i in range(0, no_of_data_in_line):
+            type_table[type_of_data].append("0x{:016x}".format(next_addr))
             data_table["0x{:016x}".format(next_addr)] = decode[4 + i]
             next_addr = base + get_decimal_value(address) + offset
     init_data.close()
