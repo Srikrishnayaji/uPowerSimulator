@@ -1,18 +1,3 @@
-"""
-Modified uPower Simulator Code.
-->Changes Done:
-1)Previous Errors Corrected.
-2)Modified load, store, read_text_segment, read_data_segment and data_table.
-3)special_registers added
-4)PC functionality added.
-5).asciiz can be read.(further modifications may be reqd(based on tests performed.)).
-6)print_register_data, print_special_regs, print_data_table modified and added.
-7)Execute function created.
-->To be done:
-1)Add jump instructions.
-2)Test the existing code.
-3)line var to be changed to ir
-"""
 line = ""
 
 from math import pow
@@ -176,7 +161,7 @@ def read_data_segment():
         decode  = data.split()
         address = decode[1]
         type_of_data = decode[2]
-        no_of_data_in_line = decode[3]
+        no_of_data_in_line = get_decimal_value(decode[3])
         if type_of_data == '11':
             offset = 1
         elif type_of_data == '01':
