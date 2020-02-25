@@ -175,7 +175,7 @@ def read_data_segment():
     init_data.close()
 
 def read_text_segment():
-    init_text = open('insterfile.txt', 'r')
+    init_text = open('instrfile.txt', 'r')
     inslist = init_text.readlines()
     global line
     #step count execution code of uPower assembly code.
