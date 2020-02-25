@@ -65,7 +65,7 @@ def load():
     if loc >= int('0x0000000010000000', 0):
         loc = "0x{:016x}".format(loc)
         if loc in data_table.keys():
-            register_table[get_decimal_value(line[6:11])] = data_table[loc]
+            register_table[get_decimal_value(line[6:11])] = get_decimal_value(data_table[loc])
         else:
             register_table[get_decimal_value(line[6:11])] = 0
 
@@ -77,7 +77,7 @@ def lwz():
     if loc >= int('0x0000000010000000', 0):
         loc = "0x{:016x}".format(loc)
         if loc in data_table.keys():
-            register_table[get_decimal_value(line[6:11])] = data_table[loc]
+            register_table[get_decimal_value(line[6:11])] = get_decimal_value(data_table[loc])
         else:
             register_table[get_decimal_value(line[6:11])] = 0
 
