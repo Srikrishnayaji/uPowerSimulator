@@ -314,6 +314,5 @@ def execute():
             create_dump_values("Final Data Contents")
 
 if __name__ == '__main__':
-    #execute()
-    create_dump_values()
+    execute()
 #-------------------------------
