@@ -168,7 +168,7 @@ def bca():
 #system call.
 def syscall():
     lev = get_decimal_value(line[20:27])
-    if line[30] == 1 and lev == 4:
+    if line[30] == '1' and lev == 4:
         base_addr = 0x0000000010000000
         register_table[18] = register_table[18] + base_addr
         base_address = "0x{:016x}".format(register_table[18])
