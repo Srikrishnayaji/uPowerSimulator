@@ -204,7 +204,7 @@ def compute_instruction():
             print("Instruction Error");
 
 def get_pc_value(curr_decipc):
-    special_registers['pc'] = "0x{:016x}".format(special_registers['pc'] + (4*(curr_decipc+1)))
+    special_registers['pc'] = "0x{:016x}".format(int(special_registers['pc'], 0) + (4*(curr_decipc+1)))
     print("PC: ", special_registers['pc'])
 #printing the memory state functions.
 def print_register_data():
@@ -236,7 +236,7 @@ def read_data_segment():
         decode  = data.split()
         address = decode[1]
         type_of_data = decode[2]
-        no_of_data_in_line = get_decimal_value(decode[3])
+        no_of_data_in_line = len(decode[4:])
         next_addr = base + get_decimal_value(address)
         if type_of_data == '11':
             offset = 1
