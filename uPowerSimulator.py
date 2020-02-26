@@ -204,7 +204,7 @@ def compute_instruction():
             print("Instruction Error");
 
 def get_pc_value(curr_decipc):
-    special_registers['pc'] = "0x{:016x}".format(int(special_registers['pc'], 0) + (4*(curr_decipc+1)))
+    special_registers['pc'] = "0x{:016x}".format(int('0x0000000000400000', 0) + (4*(curr_decipc+1)))
     print("PC: ", special_registers['pc'])
 #printing the memory state functions.
 def print_register_data():
