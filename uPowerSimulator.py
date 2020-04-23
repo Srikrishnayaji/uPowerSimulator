@@ -310,7 +310,7 @@ def execute():
         print_special_regs()
         print("Want the data in a txt file?[Y/n]")
         ans = input()
-        if ans != 'n' || ans != 'N':
+        if ans != 'n' or ans != 'N':
             create_dump_values("Final Data Contents")
 
 if __name__ == '__main__':
